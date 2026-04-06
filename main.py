@@ -11,7 +11,7 @@ class Professor(Base):
     id = Column(Integer,primary_key=True)
     nome = Column(String(100),nullable=False)
     materia = Column(String(100))
-    aulas = relationship("Aula", back_populates="professor", cascade="all, delete-orphan")
+    alunos = relationship("Alunos", back_populates="professor", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<Professor(id={self.id}, nome='{self.nome}')>"
@@ -26,11 +26,37 @@ class Alunos(Base):
 
     professor_id = Column(Integer, ForeignKey("professor.id"), nullable=False)
 
-    professor =relationship("Professor", back_populates="aulas")
-
-
+    professor =relationship("Professor", back_populates="alunos")
     def __repr__(self):
         return f"<Materias(nome='{self.nome}',professor_id={self.professor_id},aulas_id={self.aulas_id})>"
     
 Base.metadata.create_all(engine)
 
+def inserir_professor():
+    with Session() as session:
+        try:
+            nome_professor = input("Digite o nome do professor: ").capitalize()
+            nome_materia = input("Digite qual a materia: ").capitalize()
+
+            professor = Professor(nome=nome_professor, materia=nome_materia )
+            session.add(professor)
+            session.commit()
+            print(f"professor adicionado com sucesso!")
+        except Exception as erro:
+            session.rollback()
+            print(f"Ocorreu um erro: {erro}")
+# inserir_professor()
+
+def inserir_aluno():
+    with Session() as session:
+        try:
+            nome_alunos = input("Digite o nome dos alunos: ").capitalize()
+            nome_RA = input("Digite seu RA: ").capitalize()
+
+            alunos = Alunos(nome=alunos, nome_RA=RA )
+            session.add(alunos)
+            session.commit()
+            print(f"professor adicionado com sucesso!")
+        except Exception as erro:
+            session.rollback()
+            print(f"Ocorreu um erro: {erro}")
